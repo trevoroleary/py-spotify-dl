@@ -20,7 +20,7 @@ class NewTimeAndSongs:
 
 def auth() -> spotipy.Spotify:
     scope = "user-library-read"
-    sp = spotipy.Spotify(auth_manager=SpotifyOAuth(scope=scope, cache_path=Path("spotify-dl", "token-cache.txt")))
+    sp = spotipy.Spotify(auth_manager=SpotifyOAuth(scope=scope, cache_path=Path(Path.home(), "spotify-dl", "token-cache.txt")))
     return sp
 
 
@@ -42,6 +42,8 @@ def check_new_liked_songs(sp: spotipy.Spotify, last_update: datetime) -> NewTime
 def main():
     sp = auth()
     last_update = SERVER_START_UP_TIME
+    print("Application Started...")
+    print("press ctrl-C to exit")
     while True:
         newtime_songs = check_new_liked_songs(sp, last_update)
         last_update = newtime_songs.latest_time

@@ -6,10 +6,10 @@ from pathlib import Path
 
 logging.basicConfig()
 
-if not os.path.exists(Path("spotify-dl")):
+if not os.path.exists(Path(Path.home(), "spotify-dl")):
     os.mkdir("spotify-dl")
-    os.mkdir(Path("spotify-dl", "downloads"))
-    with open(Path("spotify-dl", "spotify-credentials.txt"), "w") as f:
+    os.mkdir(Path(Path.home(), "spotify-dl", "downloads"))
+    with open(Path(Path.home(), "spotify-dl", "spotify-credentials.txt"), "w") as f:
         f.writelines(
             [
                 "SPOTIPY_CLIENT_ID=\n",
@@ -19,10 +19,11 @@ if not os.path.exists(Path("spotify-dl")):
             ]
         )
     print(
-        f"Please fill in variables made in {Path('spotify-dl', 'spotify-credentials.txt')}\n"
+        f"Please fill in variables made in {Path(Path.home(), 'spotify-dl', 'spotify-credentials.txt')}\n"
         f"Learn more from the README.md\n"
         f"Run again when you're done"
     )
     sys.exit()
 
-load_dotenv(Path("spotify-dl", "spotify-credentials.txt"))
+print(Path(Path.home(), "spotify-dl", "spotify-credentials.txt"))
+load_dotenv(Path(Path.home(), "spotify-dl", "spotify-credentials.txt"))

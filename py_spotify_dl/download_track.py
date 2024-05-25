@@ -9,7 +9,7 @@ from pathlib import Path
 
 
 def create_download_directory():
-    path = Path("spotify-dl", "downloads")
+    path = Path(Path.home(), "spotify-dl", "downloads")
 
     if os.path.exists(path):
         return path
@@ -38,7 +38,7 @@ def get_ydl_opts():
 
 
 def add_track_metadata(track_id, song: dict):
-    audiofile = eyed3.load(Path("spotify-dl", "downloads", f"{track_id}.mp3"))
+    audiofile = eyed3.load(Path(Path.home(), "spotify-dl", "downloads", f"{track_id}.mp3"))
 
     if audiofile.tag is None:
         audiofile.initTag()
@@ -55,8 +55,8 @@ def add_track_metadata(track_id, song: dict):
     audiofile.tag.save()
 
     # Update downloaded file name
-    src = Path("spotify-dl", "downloads", f"{track_id}.mp3")
-    dst = Path("spotify-dl", "downloads", f"{song['name']}.mp3")
+    src = Path(Path.home(), "spotify-dl", "downloads", f"{track_id}.mp3")
+    dst = Path(Path.home(), "spotify-dl", "downloads", f"{song['name']}.mp3")
     os.rename(src, dst)
 
 
