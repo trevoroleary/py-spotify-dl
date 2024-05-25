@@ -6,3 +6,4 @@ dist
 .env
 spotify-dl
 __pycache__
+poetry.lock

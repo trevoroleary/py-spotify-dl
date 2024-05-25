@@ -1,3 +1,4 @@
+import logging
 from urllib import request
 from urllib.parse import quote
 from yt_dlp import YoutubeDL
@@ -8,7 +9,7 @@ from pathlib import Path
 
 
 def create_download_directory():
-    path = f"./downloads"
+    path = Path("spotify-dl", "downloads")
 
     if os.path.exists(path):
         return path
@@ -23,8 +24,9 @@ def create_download_directory():
 def get_ydl_opts():
     return {
         "format": "bestaudio/best",
-        "outtmpl": f"downloads/%(id)s.%(ext)s",
+        "outtmpl": f"spotify-dl/downloads/%(id)s.%(ext)s",
         "ignoreerrors": True,
+        "logger": logging.getLogger("youtube"),
         "postprocessors": [
             {
                 "key": "FFmpegExtractAudio",
@@ -76,5 +78,6 @@ def download_track_ydl(song: dict):
         with YoutubeDL(get_ydl_opts()) as ydl:
             url = "https://www.youtube.com/watch?v=" + video_ids[0]
             metadata = ydl.extract_info(url, download=False)
-            downloaded_track = ydl.download([url])
+            ydl.download([url])
             add_track_metadata(metadata["id"], song)
+            print(f"Downloaded: {metadata['name']}")
