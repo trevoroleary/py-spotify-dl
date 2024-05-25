@@ -1,0 +1,8 @@
+build
+dist
+.DS_Store
+.idea/
+.venv
+.env
+spotify-dl
+__pycache__

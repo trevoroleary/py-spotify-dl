@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "py-spotify-dl"
+version = "0.1.0"
+description = ""
+authors = ["Trevor O'leary <toleary@tesla.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = ">=3.11,<3.13"
+spotipy = "^2.23.0"
+yt-dlp = "^2024.4.9"
+python-dotenv = "^1.0.1"
+eyed3 = "^0.9.7"
+
+
+[tool.poetry.group.dev.dependencies]
+pyinstaller = "^6.7.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
