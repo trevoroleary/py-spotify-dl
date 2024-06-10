@@ -14,8 +14,9 @@ if not os.path.exists(Path(Path.home(), "spotify-dl")):
             [
                 "SPOTIPY_CLIENT_ID=\n",
                 "SPOTIPY_CLIENT_SECRET=\n",
-                "SPOTIPY_REDIRECT_URI=\n"
-                "USER_ID=\n"
+                "SPOTIPY_REDIRECT_URI=\n",
+                "USER_ID=\n",
+                "DOWNLOAD_PATH=\n",
             ]
         )
     print(
