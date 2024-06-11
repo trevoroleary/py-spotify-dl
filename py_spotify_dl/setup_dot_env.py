@@ -8,11 +8,14 @@ logging.basicConfig()
 logger = logging.getLogger("Dot Env")
 logger.info("Setting up environment variables")
 
+
 def make_local_path():
     if not os.path.exists(Path(Path.home(), "spotify-dl")):
         os.mkdir(Path(Path.home(), "spotify-dl"))
     if not os.path.exists(Path(Path.home(), "spotify-dl", "downloads")):
         os.mkdir(Path(Path.home(), "spotify-dl", "downloads"))
+    if not os.path.exists(Path(Path.home(), "spotify-dl", "library")):
+        os.mkdir(Path(Path.home(), "spotify-dl", "library"))
 
     with open(Path(os.environ['DATA_PATH'], "spotify-credentials.txt"), "w") as f:
         f.writelines(
@@ -39,11 +42,13 @@ def setup_env():
     if "DOCKER_CONTAINER" in os.environ:
         os.environ['DOWNLOAD_PATH'] = "/downloads"
         os.environ['DATA_PATH'] = "/data"
+        os.environ['MUSIC_LIBRARY'] = "/music"
         with open(Path(os.environ['DATA_PATH'], "test.txt"), 'w') as f:
             f.write("test")
 
     else:
         os.environ['DOWNLOAD_PATH'] = str(Path(Path.home(), "spotify-dl", "downloads"))
+        os.environ['MUSIC_LIBRARY'] = str(Path(Path.home(), "spotify-dl", "library"))
         os.environ['DATA_PATH'] = str(Path(Path.home(), "spotify-dl"))
         if not os.path.exists(Path(os.environ['DATA_PATH'], "spotify-credentials.txt")):
             make_local_path()
