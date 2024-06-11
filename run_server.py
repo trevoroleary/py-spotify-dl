@@ -56,7 +56,7 @@ scheduler.add_job(id='Download Latest', func=download_latest, trigger='interval'
 
 AUTH_URL = "https://accounts.spotify.com/authorize"
 TOKEN_URL = "https://accounts.spotify.com/api/token"
-REDIRECT_URI = "http://localhost:8080/callback"
+REDIRECT_URI = os.environ["SPOTIPY_REDIRECT_URI"]  # "http://localhost:8080/callback"
 CLIENT_ID = os.environ["SPOTIPY_CLIENT_ID"]
 CLIENT_SECRET = os.environ["SPOTIPY_CLIENT_SECRET"]
 SCOPE = ['user-library-read', 'user-read-currently-playing']
