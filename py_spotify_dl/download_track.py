@@ -6,25 +6,27 @@ import re
 import os
 import eyed3
 from pathlib import Path
+DOWNLOADS_PATH = os.environ['DOWNLOAD_PATH']
+
+logger = logging.getLogger("downloader")
 
 
 def create_download_directory():
-    path = Path(Path.home(), "spotify-dl", "downloads")
-
+    path = Path(DOWNLOADS_PATH)
     if os.path.exists(path):
         return path
-
     try:
         os.makedirs(path)
         return path
-    except OSError:
-        print("Creation of the download directory failed")
+    except OSError as e:
+        logger.error("Creation of the download directory failed")
+        raise e
 
 
 def get_ydl_opts():
     return {
         "format": "bestaudio/best",
-        "outtmpl": f"spotify-dl/downloads/%(id)s.%(ext)s",
+        "outtmpl": str(Path(DOWNLOADS_PATH, "%(id)s.%(ext)s")),
         "ignoreerrors": True,
         "logger": logging.getLogger("youtube"),
         "postprocessors": [
@@ -38,7 +40,7 @@ def get_ydl_opts():
 
 
 def add_track_metadata(track_id, song: dict):
-    audiofile = eyed3.load(Path(Path.home(), "spotify-dl", "downloads", f"{track_id}.mp3"))
+    audiofile = eyed3.load(Path(DOWNLOADS_PATH, f"{track_id}.mp3"))
 
     if audiofile.tag is None:
         audiofile.initTag()
@@ -55,8 +57,8 @@ def add_track_metadata(track_id, song: dict):
     audiofile.tag.save()
 
     # Update downloaded file name
-    src = Path(Path.home(), "spotify-dl", "downloads", f"{track_id}.mp3")
-    dst = Path(Path.home(), "spotify-dl", "downloads", f"{song['name']}.mp3")
+    src = Path(DOWNLOADS_PATH, f"{track_id}.mp3")
+    dst = Path(DOWNLOADS_PATH, f"{song['name']}.mp3")
     os.rename(src, dst)
 
 
@@ -80,4 +82,4 @@ def download_track_ydl(song: dict):
             metadata = ydl.extract_info(url, download=False)
             ydl.download([url])
             add_track_metadata(metadata["id"], song)
-            print(f"Downloaded: {metadata['name']}")
+            logger.info(f"Downloaded: {metadata['title']}")

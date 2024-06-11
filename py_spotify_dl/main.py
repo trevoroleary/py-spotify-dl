@@ -1,5 +1,5 @@
 import py_spotify_dl.setup_dot_env
-
+import os
 import time
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
@@ -10,7 +10,7 @@ from dataclasses import dataclass
 from py_spotify_dl.download_track import download_track_ydl
 from pathlib import Path
 SERVER_START_UP_TIME = datetime.now(dt_timezone.utc)
-
+DATA_PATH = os.environ['DATA_PATH']
 
 @dataclass
 class NewTimeAndSongs:
@@ -20,7 +20,7 @@ class NewTimeAndSongs:
 
 def auth() -> spotipy.Spotify:
     scope = "user-library-read"
-    sp = spotipy.Spotify(auth_manager=SpotifyOAuth(scope=scope, cache_path=Path(Path.home(), "spotify-dl", "token-cache.txt")))
+    sp = spotipy.Spotify(auth_manager=SpotifyOAuth(scope=scope, cache_path=Path(DATA_PATH, "token-cache.txt"), open_browser=False))
     return sp
 
 
