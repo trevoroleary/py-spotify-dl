@@ -38,11 +38,13 @@ def download_latest():
     newtime_songs = check_new_liked_songs(SP_CLIENT, LAST_UPDATE)
     LAST_UPDATE = newtime_songs.latest_time
     if newtime_songs.songs:
-        processes = [Process(target=download_track_ydl, args=(song,)) for song in newtime_songs.songs]
-        for process in processes:
-            process.start()
-        for process in processes:
-            process.join()
+        for song in newtime_songs.songs:
+            download_track_ydl(song)
+        # processes = [Process(target=download_track_ydl, args=(song,)) for song in newtime_songs.songs]
+        # for process in processes:
+        #     process.start()
+        # for process in processes:
+        #     process.join()
 
 
 scheduler.add_job(id='Download Latest', func=download_latest, trigger='interval', seconds=3)
