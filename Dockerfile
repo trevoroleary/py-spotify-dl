@@ -17,4 +17,5 @@ COPY . .
 RUN pip install -e .
 
 # Run app.py when the container launches
-CMD ["python", "./py_spotify_dl/main.py"]
+#CMD ["python", "./py_spotify_dl/run_server.py"]
+CMD ["gunicorn", "-b", "0.0.0.0:8080", "download_track:app"]

@@ -1,13 +1,8 @@
 import os
 import sys
-import logging
+
 from dotenv import load_dotenv
 from pathlib import Path
-
-logging.basicConfig()
-logger = logging.getLogger("Dot Env")
-logger.info("Setting up environment variables")
-
 
 def make_local_path():
     if not os.path.exists(Path(Path.home(), "spotify-dl")):
@@ -26,7 +21,7 @@ def make_local_path():
                 "USER_ID=\n",
             ]
         )
-    print(
+    logger.debug(
         f"Please fill in variables made in {Path(os.environ['DATA_PATH'], 'spotify-credentials.txt')}\n"
         f"Learn more from the README.md\n"
         f"Run again when you're done"

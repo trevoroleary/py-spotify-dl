@@ -80,7 +80,7 @@ def download_track_ydl(song: dict):
             for artist in song['artists']:
                 artist_str += " " + artist['name']
             song_name = song['name']
-            print(f"Beginning a download attempt on: {song_name} by {artist_str}")
+            logger.debug(f"Beginning a download attempt on: {song_name} by {artist_str}")
             uri = quote(
                     f'{song_name.replace(" ", "+")}+{artist_str.replace(" ", "+")}'
                 )
@@ -96,13 +96,12 @@ def download_track_ydl(song: dict):
                     metadata = ydl.extract_info(url, download=False)
                     ydl.download([url])
                     add_track_metadata(metadata["id"], song)
-                    print(f"Downloaded: {metadata['title']}")
+                    logger.info(f"Downloaded: {metadata['title']}")
             else:
-                print(f"Could not find any audio for {song_name} by {artist_str}")
+                logger.error(f"Could not find any audio for {song_name} by {artist_str}")
         except Exception as e:
             logger.error(f"An error occurred while downloading {song['name']} | Trying again {i}")
             logger.error(e)
-            traceback.print_exc()
             time.sleep(0.1)
             continue
         else:
