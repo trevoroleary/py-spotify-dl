@@ -82,4 +82,4 @@ def download_track_ydl(song: dict):
             metadata = ydl.extract_info(url, download=False)
             ydl.download([url])
             add_track_metadata(metadata["id"], song)
-            logger.info(f"Downloaded: {metadata['title']}")
+            print(f"Downloaded: {metadata['title']}")

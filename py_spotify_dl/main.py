@@ -44,6 +44,9 @@ def main():
     last_update = SERVER_START_UP_TIME
     print("Application Started...")
     print("press ctrl-C to exit")
+    check_new_liked_songs(sp, last_update)
+    print(f"Application has started successfully")
+    time.sleep(3)
     while True:
         newtime_songs = check_new_liked_songs(sp, last_update)
         last_update = newtime_songs.latest_time
