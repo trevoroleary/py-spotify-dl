@@ -16,6 +16,7 @@ requests-oauthlib = "^2.0.0"
 flask-apscheduler = "^1.13.1"
 colorlog = "^6.8.2"
 gunicorn = "^22.0.0"
+logtail-python = "^0.2.10"
 
 
 [tool.poetry.group.dev.dependencies]

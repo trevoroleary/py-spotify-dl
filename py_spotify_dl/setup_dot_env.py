@@ -3,6 +3,10 @@ import sys
 
 from dotenv import load_dotenv
 from pathlib import Path
+import logging
+
+logger = logging.getLogger("ENV-SETUP-LOCAL")
+logger.setLevel(level=logging.DEBUG)
 
 def make_local_path():
     if not os.path.exists(Path(Path.home(), "spotify-dl")):

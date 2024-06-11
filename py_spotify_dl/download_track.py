@@ -6,13 +6,14 @@ from urllib.parse import quote
 from yt_dlp import YoutubeDL
 import re
 import os
+import shutil
 import eyed3
 from pathlib import Path
 DOWNLOADS_PATH = os.environ['DOWNLOAD_PATH']
 LIBRARY_PATH = os.environ['MUSIC_LIBRARY']
 
 logger = logging.getLogger("downloader")
-
+logger.setLevel(logging.DEBUG)
 
 def create_download_directory():
     path = Path(DOWNLOADS_PATH)
@@ -70,7 +71,7 @@ def add_track_metadata(track_id, song: dict):
         except OSError as e:
             logger.error("Creation of the download directory failed")
     dst = Path(LIBRARY_PATH, album_artist, album_name,f"{song['name']}.mp3")
-    os.rename(src, dst)
+    shutil.move(src, dst)
 
 
 def download_track_ydl(song: dict):
@@ -102,6 +103,7 @@ def download_track_ydl(song: dict):
         except Exception as e:
             logger.error(f"An error occurred while downloading {song['name']} | Trying again {i}")
             logger.error(e)
+            traceback.print_exc()
             time.sleep(0.1)
             continue
         else:

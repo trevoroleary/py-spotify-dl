@@ -16,6 +16,7 @@ SERVER_START_UP_TIME = datetime.now(dt_timezone.utc)
 DATA_PATH = os.environ['DATA_PATH']
 
 logger = logging.getLogger("LOCAL-MAIN")
+logger.setLevel(logging.DEBUG)
 
 
 def auth() -> spotipy.Spotify:

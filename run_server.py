@@ -10,7 +10,8 @@ from py_spotify_dl.run_local import check_new_liked_songs
 from py_spotify_dl.download_track import download_track_ydl
 from datetime import datetime
 from datetime import timezone as dt_timezone
-from multiprocessing import Process
+import logging
+
 
 
 class Config:
@@ -26,6 +27,8 @@ LAST_UPDATE = datetime.now(dt_timezone.utc)
 scheduler = APScheduler()
 scheduler.init_app(app)
 scheduler.start()
+logger = logging.getLogger("SPOTIFY-SERVER")
+logger.setLevel(logging.DEBUG)
 
 
 def download_latest():
@@ -33,6 +36,7 @@ def download_latest():
     global LAST_UPDATE
 
     if not isinstance(SP_CLIENT, spotipy.Spotify):
+        logger.debug(f"No Files to download")
         return
 
     newtime_songs = check_new_liked_songs(SP_CLIENT, LAST_UPDATE)
@@ -101,4 +105,5 @@ def callback():
 
 
 if __name__ == '__main__':
+    logger.info("TEST TEST TEST")
     app.run(host='0.0.0.0', port=8080, debug=False)
