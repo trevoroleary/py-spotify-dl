@@ -5,7 +5,8 @@ from dotenv import load_dotenv
 from pathlib import Path
 
 logging.basicConfig()
-
+logger = logging.getLogger("Dot Env")
+logger.info("Setting up environment variables")
 
 def make_local_path():
     if not os.path.exists(Path(Path.home(), "spotify-dl")):
@@ -38,6 +39,9 @@ def setup_env():
     if "DOCKER_CONTAINER" in os.environ:
         os.environ['DOWNLOAD_PATH'] = "/downloads"
         os.environ['DATA_PATH'] = "/data"
+        with open(Path(os.environ['DATA_PATH'], "test.txt"), 'w') as f:
+            f.write("test")
+
     else:
         os.environ['DOWNLOAD_PATH'] = str(Path(Path.home(), "spotify-dl", "downloads"))
         os.environ['DATA_PATH'] = str(Path(Path.home(), "spotify-dl"))
@@ -49,5 +53,6 @@ def setup_env():
     for required_variable in required_variables:
         if required_variable not in os.environ and "DOCKER_CONTAINER" not in os.environ:
             raise ValueError(f"Please set {required_variable} in the environment variables")
+
 
 setup_env()
