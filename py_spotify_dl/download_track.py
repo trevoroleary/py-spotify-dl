@@ -53,7 +53,7 @@ def add_track_metadata(track_id, song: dict):
     audiofile.tag.title = song["name"]
     album_name = song["album"]['name']
     audiofile.tag.album = album_name
-    audiofile.tag.artist = "; ".join(artist['name'] for artist in song['artists'])
+    audiofile.tag.artist = "\\\\".join(artist['name'] for artist in song['artists'])
     album_artist = song['artists'][0]['name']
     audiofile.tag.album_artist = album_artist
     audiofile.tag.release_date = song['album']['release_date']
