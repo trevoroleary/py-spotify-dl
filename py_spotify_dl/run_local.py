@@ -1,5 +1,5 @@
-import py_spotify_dl.setup_logger
 import py_spotify_dl.setup_dot_env
+import py_spotify_dl.setup_logger
 from py_spotify_dl.helpers import check_new_liked_songs
 import os
 import time
