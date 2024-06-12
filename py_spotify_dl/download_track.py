@@ -8,6 +8,7 @@ import re
 import os
 import shutil
 import eyed3
+from eyed3 import id3
 from pathlib import Path
 DOWNLOADS_PATH = os.environ['DOWNLOAD_PATH']
 LIBRARY_PATH = os.environ['MUSIC_LIBRARY']
@@ -44,16 +45,15 @@ def get_ydl_opts():
 
 
 def add_track_metadata(track_id, song: dict):
-    audiofile = eyed3.load(Path(DOWNLOADS_PATH, f"{track_id}.mp3"))
+    audiofile = eyed3.load(Path(DOWNLOADS_PATH, f"{track_id}.mp3"), tag_version=id3.ID3_V2_4)
 
-    if audiofile.tag is None:
-        audiofile.initTag()
+    audiofile.initTag(version=id3.ID3_V2_4)
 
     # Add basic tags
     audiofile.tag.title = song["name"]
     album_name = song["album"]['name']
     audiofile.tag.album = album_name
-    audiofile.tag.artist = "\\\\".join(artist['name'] for artist in song['artists'])
+    audiofile.tag.artist = "\0".join(artist['name'] for artist in song['artists'])
     album_artist = song['artists'][0]['name']
     audiofile.tag.album_artist = album_artist
     audiofile.tag.release_date = song['album']['release_date']

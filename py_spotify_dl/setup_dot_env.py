@@ -13,8 +13,10 @@ def make_local_path():
         os.mkdir(Path(Path.home(), "spotify-dl"))
     if not os.path.exists(Path(Path.home(), "spotify-dl", "downloads")):
         os.mkdir(Path(Path.home(), "spotify-dl", "downloads"))
-    if not os.path.exists(Path(Path.home(), "spotify-dl", "library")):
-        os.mkdir(Path(Path.home(), "spotify-dl", "library"))
+    if not os.path.exists(Path(Path.home(), "spotify-dl", "music")):
+        os.mkdir(Path(Path.home(), "spotify-dl", "music"))
+    if not os.path.exists(Path(Path.home(), "spotify-dl", "data")):
+        os.mkdir(Path(Path.home(), "spotify-dl", "data"))
 
     with open(Path(os.environ['DATA_PATH'], "spotify-credentials.txt"), "w") as f:
         f.writelines(
@@ -47,8 +49,8 @@ def setup_env():
 
     else:
         os.environ['DOWNLOAD_PATH'] = str(Path(Path.home(), "spotify-dl", "downloads"))
-        os.environ['MUSIC_LIBRARY'] = str(Path(Path.home(), "spotify-dl", "library"))
-        os.environ['DATA_PATH'] = str(Path(Path.home(), "spotify-dl"))
+        os.environ['MUSIC_LIBRARY'] = str(Path(Path.home(), "spotify-dl", "music"))
+        os.environ['DATA_PATH'] = str(Path(Path.home(), "spotify-dl", "data"))
         if not os.path.exists(Path(os.environ['DATA_PATH'], "spotify-credentials.txt")):
             make_local_path()
         else:
