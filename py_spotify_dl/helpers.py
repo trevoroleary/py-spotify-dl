@@ -1,20 +1,27 @@
-import os
-import time
 import spotipy
-from spotipy.oauth2 import SpotifyOAuth
 from datetime import datetime
 from datetime import timezone as dt_timezone
-from multiprocessing import Process
-import logging
 from dataclasses import dataclass
-from py_spotify_dl.download_track import download_track_ydl
-from pathlib import Path
+import logging
 
 
 @dataclass
 class NewTimeAndSongs:
     latest_time: datetime
     songs: list
+
+
+def check_download_playlist_for_new_songs(sp: spotipy.Spotify) -> list:
+    logger = logging.getLogger("download_playlist")
+    playlist_id = "219yF8F4hh3E9xDsZLw0sF"
+    playlist = sp.playlist_items(playlist_id=playlist_id)
+    songs = list()
+    for item in playlist['items']:
+        song = item['track']
+        sp.playlist_remove_all_occurrences_of_items(playlist_id=playlist_id, items=[song['id']])
+        songs.append(song)
+        logger.debug(f"Added {song['name']} to download list")
+    return songs
 
 
 def check_new_liked_songs(sp: spotipy.Spotify, last_update: datetime) -> NewTimeAndSongs:

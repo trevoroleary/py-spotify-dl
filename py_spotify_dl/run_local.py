@@ -1,6 +1,6 @@
 import py_spotify_dl.setup_dot_env
 import py_spotify_dl.setup_logger
-from py_spotify_dl.helpers import check_new_liked_songs
+from py_spotify_dl.helpers import check_new_liked_songs, check_download_playlist_for_new_songs
 import os
 import time
 import spotipy
@@ -20,7 +20,7 @@ logger.setLevel(logging.DEBUG)
 
 
 def auth() -> spotipy.Spotify:
-    scope = "user-library-read"
+    scope = "user-library-modify user-library-read user-read-private playlist-modify-private playlist-modify-public playlist-read-collaborative playlist-read-private"
     sp = spotipy.Spotify(
         auth_manager=SpotifyOAuth(
             scope=scope,
@@ -42,12 +42,25 @@ def main():
     while True:
         newtime_songs = check_new_liked_songs(sp, last_update)
         last_update = newtime_songs.latest_time
-        if newtime_songs.songs:
-            processes = [Process(target=download_track_ydl, args=(song,)) for song in newtime_songs.songs]
-            for process in processes:
-                process.start()
-            for process in processes:
-                process.join()
+        other_songs = check_download_playlist_for_new_songs(sp)
+        songs = newtime_songs.songs
+
+        # Make sure we don't download the same song twice
+        for song in other_songs:
+            already_exists = False
+            for s in songs:
+                if s['id'] == song['id']:
+                    already_exists = True
+            if not already_exists:
+                songs.append(song)
+        if songs:
+            for song in songs:
+                download_track_ydl(song)
+            # processes = [Process(target=download_track_ydl, args=(song,)) for song in songs]
+            # for process in processes:
+            #     process.start()
+            # for process in processes:
+            #     process.join()
         time.sleep(3)
 
 

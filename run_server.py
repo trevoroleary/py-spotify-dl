@@ -6,7 +6,7 @@ import requests
 import os
 import spotipy
 from flask_apscheduler import APScheduler
-from py_spotify_dl.run_local import check_new_liked_songs
+from py_spotify_dl.run_local import check_new_liked_songs, check_download_playlist_for_new_songs
 from py_spotify_dl.download_track import download_track_ydl
 from datetime import datetime
 from datetime import timezone as dt_timezone
@@ -36,10 +36,19 @@ def download_latest():
     global LAST_UPDATE
 
     if not isinstance(SP_CLIENT, spotipy.Spotify):
-        logger.debug(f"No Files to download")
         return
 
     newtime_songs = check_new_liked_songs(SP_CLIENT, LAST_UPDATE)
+    playlist_songs = check_download_playlist_for_new_songs(SP_CLIENT)
+    for playlist_song in playlist_songs:
+        already_exists = False
+        for song in newtime_songs.songs:
+            if song['id'] == playlist_song['id']:
+                already_exists = True
+        if not already_exists:
+            newtime_songs.songs.append(playlist_song)
+            print(f"Added {playlist_song['name']} to download list")
+
     LAST_UPDATE = newtime_songs.latest_time
     if newtime_songs.songs:
         for song in newtime_songs.songs:
@@ -59,7 +68,10 @@ TOKEN_URL = "https://accounts.spotify.com/api/token"
 REDIRECT_URI = os.environ["SPOTIPY_REDIRECT_URI"]  # "http://localhost:8080/callback"
 CLIENT_ID = os.environ["SPOTIPY_CLIENT_ID"]
 CLIENT_SECRET = os.environ["SPOTIPY_CLIENT_SECRET"]
-SCOPE = ['user-library-read', 'user-read-currently-playing']
+SCOPE = [
+    # 'user-library-read', 'user-read-currently-playing'
+    "user-library-modify", "user-library-read", "user-read-private", "playlist-modify-private", "playlist-modify-public", "playlist-read-collaborative", "playlist-read-private"
+]
 
 
 def get_headers(token):

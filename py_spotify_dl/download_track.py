@@ -13,10 +13,9 @@ from pathlib import Path
 DOWNLOADS_PATH = os.environ['DOWNLOAD_PATH']
 LIBRARY_PATH = os.environ['MUSIC_LIBRARY']
 
-logger = logging.getLogger("downloader")
-logger.setLevel(logging.DEBUG)
 
 def create_download_directory():
+    logger = logging.getLogger("create-directory")
     path = Path(DOWNLOADS_PATH)
     if os.path.exists(path):
         return path
@@ -45,6 +44,7 @@ def get_ydl_opts():
 
 
 def add_track_metadata(track_id, song: dict):
+    logger = logging.getLogger("metadata")
     audiofile = eyed3.load(Path(DOWNLOADS_PATH, f"{track_id}.mp3"), tag_version=id3.ID3_V2_4)
 
     audiofile.initTag(version=id3.ID3_V2_4)
@@ -75,6 +75,7 @@ def add_track_metadata(track_id, song: dict):
 
 
 def download_track_ydl(song: dict):
+    logger = logging.getLogger("downloader")
     for i in range(3):
         try:
             artist_str = ""
